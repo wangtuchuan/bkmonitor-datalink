@@ -32,13 +32,14 @@ type BasicClient struct {
 	Session Session
 	// address IP:Port
 	address            string
+	aclToken           string // ACL token
 	watchPlanMap       map[string]Plan
 	watchPrefixPlanMap map[string]Plan
 	outChanMap         map[string]chan interface{}
 }
 
 // NewBasicClient 传入的address应符合IP:Port的结构，例如: 127.0.0.1:8080
-func NewBasicClient(address string) (ConsulClient, error) {
+func NewBasicClient(address string, aclToken string) (ConsulClient, error) {
 	flowLog := logging.NewEntry(map[string]interface{}{
 		"module": moduleName,
 	})
@@ -46,6 +47,7 @@ func NewBasicClient(address string) (ConsulClient, error) {
 	var err error
 	client := new(BasicClient)
 	client.address = address
+	client.aclToken = aclToken
 	err = GetAPI(client, address)
 	if err != nil {
 		return nil, err
@@ -66,6 +68,10 @@ var GetAPI = func(client *BasicClient, address string) error {
 	flowLog.Debugf("called")
 	conf := api.DefaultConfig()
 	conf.Address = address
+	// Set ACL token if provided
+	if client.aclToken != "" {
+		conf.Token = client.aclToken
+	}
 	// 这里的client是api接口的，不是本地的BasicClient，不要搞混了
 	apiClient, err := api.NewClient(conf)
 	if err != nil {
@@ -404,6 +410,9 @@ func (bc *BasicClient) makeWatchParams(path string, separator string) (map[strin
 			"type":  "key",
 			"key":   path,
 		}
+		if bc.aclToken != "" {
+			params["token"] = bc.aclToken
+		}
 		return params, nil
 	}
 	// 检查是否path是否已在监听
@@ -420,6 +429,9 @@ func (bc *BasicClient) makeWatchParams(path string, separator string) (map[strin
 		"stale":  false,
 		"type":   "keyprefix",
 		"prefix": prefix,
+	}
+	if bc.aclToken != "" {
+		params["token"] = bc.aclToken
 	}
 	flowLog.Debugf("done")
 	return params, nil

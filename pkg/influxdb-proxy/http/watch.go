@@ -309,14 +309,15 @@ func (httpService *Service) InitService() error {
 	var err error
 	// 生成上下文
 	httpService.ctx, httpService.stopFunc = context.WithCancel(context.Background())
-	// 从viper中获取配置
+	// 从 viper 中获取配置
 	listen := common.Config.GetString(common.ConfigHTTPAddress)
 	port := common.Config.GetString(common.ConfigHTTPPort)
 	httpService.address = listen + ":" + port
 	address := common.Config.GetString(common.ConfigKeyConsulAddress)
 	prefix := common.Config.GetString(common.ConfigKeyConsulPrefix)
+	aclToken := common.Config.GetString(common.ConfigKeyConsulACLToken)
 
-	err = consul.Init(address, prefix)
+	err = consul.Init(address, prefix, aclToken)
 	if err != nil {
 		flowLog.Errorf("consul init failed")
 		return err

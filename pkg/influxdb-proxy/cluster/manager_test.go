@@ -76,7 +76,7 @@ func (t *TestSuite) TestGetCluster() {
 
 	// 测试
 	// 初始化
-	err = consul.Init("", "")
+	err = consul.Init("", "", "")
 	t.Nil(err)
 	err = backend.Init(context.Background())
 	t.Nil(err)

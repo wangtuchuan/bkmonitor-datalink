@@ -41,4 +41,5 @@ const (
 	ConfigKeyConsulHealthServiceName = "consul.health.service_name"
 	ConfigKeyConsulAddress           = "consul.address"
 	ConfigKeyConsulPrefix            = "consul.prefix"
+	ConfigKeyConsulACLToken          = "consul.auth.acl_token"
 )

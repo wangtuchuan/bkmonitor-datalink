@@ -164,7 +164,8 @@ func (httpService *Service) Reload(flowID uint64) error {
 	// 配置读取结束,重启consul
 	address := common.Config.GetString(common.ConfigKeyConsulAddress)
 	prefix := common.Config.GetString(common.ConfigKeyConsulPrefix)
-	err = consul.Reload(address, prefix)
+	aclToken := common.Config.GetString(common.ConfigKeyConsulACLToken)
+	err = consul.Reload(address, prefix, aclToken)
 	if err != nil {
 		flowLog.Errorf("consul reload failed,error:%s", err)
 		return err

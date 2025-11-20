@@ -65,7 +65,8 @@ to quickly create a Cobra application.`,
 			return
 		}
 
-		err = consul.Init(address, prefix)
+		aclToken := common.Config.GetString(common.ConfigKeyConsulACLToken)
+		err = consul.Init(address, prefix, aclToken)
 		if err != nil {
 			logging.StdLogger.Errorf("consul init failed,error:%s", err)
 			return
