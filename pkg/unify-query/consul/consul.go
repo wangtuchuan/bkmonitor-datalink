@@ -40,7 +40,7 @@ func Wait() {
 
 // SetInstance 创建 consul 实例
 func SetInstance(ctx context.Context, kvBasePath, serviceName, consulAddress string,
-	tags []string, address string, port int, ttl string, aclToken string, caFile, keyFile, certFile string,
+	tags []string, address string, port int, ttl, aclToken, caFile, keyFile, certFile string,
 ) error {
 	lock.Lock()
 	defer lock.Unlock()
