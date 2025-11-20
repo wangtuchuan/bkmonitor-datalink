@@ -19,6 +19,7 @@ const (
 	HTTPAddressConfigPath = "http.address"
 	PortConfigPath        = "http.port"
 	TTLConfigPath         = "consul.check_ttl"
+	ACLTokenConfigPath    = "consul.auth.acl_token"
 )
 
 var (
@@ -33,4 +34,5 @@ var (
 	CaFilePath   string
 	KeyFilePath  string
 	CertFilePath string
+	ACLToken     string
 )

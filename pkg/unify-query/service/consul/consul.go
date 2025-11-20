@@ -49,7 +49,7 @@ func (s *Service) Reload(ctx context.Context) {
 
 	err := consul.SetInstance(
 		s.ctx, KVBasePath, ServiceName, Address, []string{"unify-query"},
-		HTTPAddress, Port, TTL, CaFilePath, KeyFilePath, CertFilePath,
+		HTTPAddress, Port, TTL, ACLToken, CaFilePath, KeyFilePath, CertFilePath,
 	)
 	if err != nil {
 		log.Errorf(context.TODO(), "consul service init failed for->[%s]", err)

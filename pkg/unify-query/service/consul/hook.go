@@ -28,6 +28,7 @@ func setDefaultConfig() {
 	viper.SetDefault(TLSCertFileConfigPath, "")
 	viper.SetDefault(TLSCaFileConfigPath, "")
 	viper.SetDefault(TLSKeyFileConfigPath, "")
+	viper.SetDefault(ACLTokenConfigPath, "")
 }
 
 // LoadConfig
@@ -43,6 +44,7 @@ func LoadConfig() {
 	CaFilePath = viper.GetString(TLSCaFileConfigPath)
 	KeyFilePath = viper.GetString(TLSKeyFileConfigPath)
 	CertFilePath = viper.GetString(TLSCertFileConfigPath)
+	ACLToken = viper.GetString(ACLTokenConfigPath)
 
 	log.Debugf(context.TODO(),
 		"reload success new config target service name:%s,consul address:%s,address:%s,port:%d,ttl:%s",

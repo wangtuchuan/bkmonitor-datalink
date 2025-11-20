@@ -28,17 +28,19 @@ type Client struct {
 	// 链接相关信息
 	// address IP:Port
 	address      string
+	aclToken     string // ACL token
 	caFilePath   string // ca根证书路径
 	keyFilePath  string // client端身份证书，供server验证client身份
 	certFilePath string // server端身份证书
 }
 
 // NewClient 传入的address应符合IP:Port的结构，例如: 127.0.0.1:8080
-func NewClient(address, caFile, keyFile, certFile string) (*Client, error) {
+func NewClient(address string, aclToken string, caFile, keyFile, certFile string) (*Client, error) {
 	var (
 		err    error
 		client = &Client{
 			address:            address,
+			aclToken:           aclToken,
 			caFilePath:         caFile,
 			keyFilePath:        keyFile,
 			certFilePath:       certFile,
@@ -61,6 +63,7 @@ var GetAPI = func(client *Client) error {
 
 	// 添加链接配置信息
 	conf.Address = client.address
+	conf.Token = client.aclToken
 	conf.TLSConfig.CAFile = client.caFilePath
 	conf.TLSConfig.KeyFile = client.keyFilePath
 	conf.TLSConfig.CertFile = client.certFilePath
@@ -279,6 +282,10 @@ func (bc *Client) makeWatchParams(path string, separator string) (map[string]any
 			"type":  "key",
 			"key":   path,
 		}
+		// 添加 ACL token
+		if bc.aclToken != "" {
+			params["token"] = bc.aclToken
+		}
 		return params, nil
 	}
 	// 如果传入分隔符，则监听指定目录下所有数据
@@ -290,6 +297,10 @@ func (bc *Client) makeWatchParams(path string, separator string) (map[string]any
 		"stale":  false,
 		"type":   "keyprefix",
 		"prefix": prefix,
+	}
+	// 添加 ACL token
+	if bc.aclToken != "" {
+		params["token"] = bc.aclToken
 	}
 	return params, nil
 }
